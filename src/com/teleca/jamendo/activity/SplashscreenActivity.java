@@ -37,10 +37,11 @@ public class SplashscreenActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		requestWindowFeature(Window.FEATURE_NO_TITLE); // Change to AndroidManifest.xml file
 		setContentView(R.layout.splashscreen);
 		findViewById(R.id.splashlayout);
 
+		// Animation
 		endAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
 		endAnimation.setFillAfter(true);
 		
@@ -69,8 +70,13 @@ public class SplashscreenActivity extends Activity {
 		showTutorial();
 	}
 	
+	/**
+	 * Show the tutorial view if the app is first launched.
+	 */
 	final void showTutorial() {
-		boolean showTutorial = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FIRST_RUN_PREFERENCE, true);
+		boolean showTutorial = PreferenceManager
+				.getDefaultSharedPreferences(this)
+				.getBoolean(FIRST_RUN_PREFERENCE, true);
 		if (showTutorial) {
 			final TutorialDialog dlg = new TutorialDialog(this);
 			dlg.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -78,7 +84,8 @@ public class SplashscreenActivity extends Activity {
 				public void onDismiss(DialogInterface dialog) {
 					CheckBox cb = (CheckBox) dlg.findViewById(R.id.toggleFirstRun);
 					if (cb != null && cb.isChecked()) {
-						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(SplashscreenActivity.this);
+						SharedPreferences prefs = PreferenceManager
+								.getDefaultSharedPreferences(SplashscreenActivity.this);
 						prefs.edit().putBoolean(FIRST_RUN_PREFERENCE, false).commit();
 					}
 					endAnimationHandler.removeCallbacks(endAnimationRunnable);

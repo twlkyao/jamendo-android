@@ -91,7 +91,7 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 	 */
 	public static void launch(Context c){
 		Intent intent = new Intent(c, HomeActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		c.startActivity(intent);
 	}
 	
@@ -99,7 +99,7 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 
 		mHomeListView = (ListView)findViewById(R.id.HomeListView);
