@@ -53,7 +53,7 @@ public class TutorialDialog extends Dialog {
 		setTitle(R.string.tutorial_title);
 		
 		Button mCloseButton = (Button)findViewById(R.id.closeTutorial);
-		if (mCloseButton != null) {
+		if (mCloseButton != null) { // If the Button is check, dismiss the tutorial dialog.
 			mCloseButton.setOnClickListener(new View.OnClickListener() {
 				
 				@Override

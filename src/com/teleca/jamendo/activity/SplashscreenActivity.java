@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -23,11 +22,11 @@ import com.teleca.jamendo.dialog.TutorialDialog;
  *
  */
 public class SplashscreenActivity extends Activity {
-	public final static String FIRST_RUN_PREFERENCE = "first_run";
+	public final static String FIRST_RUN_PREFERENCE = "first_run"; // SharedPreference name.
 	
-	private Animation endAnimation;
+	private Animation endAnimation; // Animation.
 	
-	private Handler endAnimationHandler;
+	private Handler endAnimationHandler; // Handle the animation.
 	private Runnable endAnimationRunnable;
 	
 	/* (non-Javadoc)
@@ -61,13 +60,13 @@ public class SplashscreenActivity extends Activity {
 			public void onAnimationRepeat(Animation animation) { }
 			
 			@Override
-			public void onAnimationEnd(Animation animation) {
-				HomeActivity.launch(SplashscreenActivity.this);
-				SplashscreenActivity.this.finish();
+			public void onAnimationEnd(Animation animation) { // Lauch the HomeActivity when the SplashscreenActivity ends.
+				HomeActivity.launch(SplashscreenActivity.this); // Lauch the HomeActivity.
+				SplashscreenActivity.this.finish(); // Finish the SplashActivity.
 			}
 		});
 
-		showTutorial();
+		showTutorial(); // Call the function to show tutorial dialog.
 	}
 	
 	/**
@@ -77,18 +76,19 @@ public class SplashscreenActivity extends Activity {
 		boolean showTutorial = PreferenceManager
 				.getDefaultSharedPreferences(this)
 				.getBoolean(FIRST_RUN_PREFERENCE, true);
-		if (showTutorial) {
+		if (showTutorial) { // The first time to run this app.
 			final TutorialDialog dlg = new TutorialDialog(this);
-			dlg.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			// Allow the creator of a dialog to run some code when the dialog is dismissed.
+			dlg.setOnDismissListener(new DialogInterface.OnDismissListener() { 
 				@Override
 				public void onDismiss(DialogInterface dialog) {
 					CheckBox cb = (CheckBox) dlg.findViewById(R.id.toggleFirstRun);
-					if (cb != null && cb.isChecked()) {
+					if (cb != null && cb.isChecked()) { // If the CheckBox is checked.
 						SharedPreferences prefs = PreferenceManager
-								.getDefaultSharedPreferences(SplashscreenActivity.this);
+								.getDefaultSharedPreferences(SplashscreenActivity.this); // Change the value of the SharedPerferences.
 						prefs.edit().putBoolean(FIRST_RUN_PREFERENCE, false).commit();
 					}
-					endAnimationHandler.removeCallbacks(endAnimationRunnable);
+					endAnimationHandler.removeCallbacks(endAnimationRunnable); // Remove all pending post.
 					endAnimationHandler.postDelayed(endAnimationRunnable, 2000);
 				}
 			});
