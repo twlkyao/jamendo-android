@@ -91,7 +91,7 @@ public class DownloadActivity extends Activity implements DownloadObserver {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.download);
 		
 		mDownloadManager = JamendoApplication.getInstance().getDownloadManager();
@@ -128,7 +128,8 @@ public class DownloadActivity extends Activity implements DownloadObserver {
 	@Override
 	protected void onResume() {
 		mDownloadManager.registerDownloadObserver(this);
-		boolean gesturesEnabled = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("gestures", true);
+		boolean gesturesEnabled = PreferenceManager.getDefaultSharedPreferences(this)
+				.getBoolean("gestures", true);
 		mGestureOverlayView.setEnabled(gesturesEnabled);
 		super.onResume();
 	}

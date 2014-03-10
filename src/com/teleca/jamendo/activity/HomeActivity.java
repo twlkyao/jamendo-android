@@ -108,6 +108,7 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 		mFailureBar = (FailureBar)findViewById(R.id.FailureBar);
 		mViewFlipper = (ViewFlipper)findViewById(R.id.ViewFlipper);
 
+		// Gesture.
 		mGestureOverlayView = (GestureOverlayView) findViewById(R.id.gestures);
 		mGestureOverlayView.addOnGesturePerformedListener(JamendoApplication
 				.getInstance().getPlayerGestureHandler());
@@ -123,7 +124,7 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 
 	@Override
 	public void onAlbumClicked(Album album) {
-		PlayerActivity.launch(this, album);
+		PlayerActivity.launch(this, album); // Start an album.
 	}
 
 	@Override
@@ -185,7 +186,9 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 	@Override
 	protected void onResume() {
 		fillHomeListView();
-		boolean gesturesEnabled = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("gestures", true);
+		boolean gesturesEnabled = PreferenceManager
+				.getDefaultSharedPreferences(this)
+				.getBoolean("gestures", true);
 		mGestureOverlayView.setEnabled(gesturesEnabled);
 		super.onResume();
 	}
@@ -248,10 +251,11 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 
 		// show this list item only if the SD Card is present
 		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-			libraryListEntry.add(new PurpleEntry(R.drawable.list_download, R.string.download, new PurpleListener(){
+			libraryListEntry.add(new PurpleEntry(R.drawable.list_download, R.string.download,
+					new PurpleListener(){
 				@Override
 				public void performAction() {
-					DownloadActivity.launch(HomeActivity.this);
+					DownloadActivity.launch(HomeActivity.this); // Launch the Download Activity.
 				}
 			}));
 		}
@@ -289,7 +293,8 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 		public void onItemClick(AdapterView<?> adapterView, View view, int index,
 				long time) {
 			try{
-				PurpleListener listener = ((PurpleEntry)adapterView.getAdapter().getItem(index)).getListener();
+				PurpleListener listener = ((PurpleEntry)adapterView.getAdapter()
+						.getItem(index)).getListener();
 				if(listener != null){
 					listener.performAction();
 				}
@@ -318,7 +323,7 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 			JamendoGet2Api server = new JamendoGet2ApiImpl();
 			Album[] albums = null;
 			try {
-				albums = server.getPopularAlbumsWeek();
+				albums = server.getPopularAlbumsWeek(); // Retrieve "this week's most popular albums".
 			} catch (JSONException e) {
 				e.printStackTrace();
 			} catch (WSError e){
@@ -358,9 +363,6 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 			Toast.makeText(HomeActivity.this, values[0].getMessage(), Toast.LENGTH_LONG).show();
 			super.onProgressUpdate(values);
 		}
-		
-		
-
 	}
 
 	/**
@@ -376,19 +378,23 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 			super(activity, loadingMsg, failMsg);
 		}
 
+		/**
+		 * Get the top 100 listened songs in the backgroud.
+		 */
 		@Override
 		public Playlist doInBackground(Void... params) {
 			JamendoGet2Api server = new JamendoGet2ApiImpl();
 			int[] id = null;
 			try {
-				id = server.getTop100Listened();
+				id = server.getTop100Listened(); // Returns tracks ids of top week tracks
 				// if loading rss failed and no tracks are there - report an error
 				if (id == null) {
 					publishProgress(new WSError((String) getResources().getText(R.string.top100_fail)));
 					return null;
 				}
 				Album[] albums = server.getAlbumsByTracksId(id);
-				Track[] tracks = server.getTracksByTracksId(id, JamendoApplication.getInstance().getStreamEncoding());
+				Track[] tracks = server.getTracksByTracksId(id, JamendoApplication
+						.getInstance().getStreamEncoding());
 				if(albums == null || tracks == null)
 					return null;
 				Hashtable<Integer, PlaylistEntry> hashtable = new Hashtable<Integer, PlaylistEntry>(); 
@@ -435,5 +441,4 @@ public class HomeActivity extends Activity implements OnAlbumClickListener {
 		}
 		
 	};
-
 }
